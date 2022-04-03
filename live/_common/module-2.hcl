@@ -11,7 +11,7 @@ locals {
 }
 
 terraform {
-  source = "${local.common_vars.locals.modules_folder}//module-1"
+  source = "${local.common_vars.locals.modules_folder}//module-2"
 }
 
 inputs = {
