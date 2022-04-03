@@ -16,7 +16,5 @@ terraform {
 
 inputs = {
   environment    = local.environment
-  aws_account_id = local.aws_account_id
-  aws_region     = local.aws_region
   topic_name     = "module-1-${local.topic_name}-${local.aws_account_id}-${local.aws_region}-${local.environment}"
 }
