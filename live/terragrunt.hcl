@@ -11,11 +11,12 @@ locals {
   # Automatically load region-level variables
   region_vars = read_terragrunt_config(find_in_parent_folders("region.hcl"))
 
+  common_vars = read_terragrunt_config(find_in_parent_folders("common.hcl"))
+
   # Extract the variables we need for easy access
-  account_name   = local.environment_vars.locals.account_name
-  environment    = local.environment_vars.locals.environment
-  aws_account_id = local.environment_vars.locals.aws_account_id
-  aws_region     = local.region_vars.locals.aws_region
+  environment      = local.environment_vars.locals.environment
+  aws_account_id   = local.environment_vars.locals.aws_account_id
+  aws_region       = local.region_vars.locals.aws_region
 }
 
 generate "versions" {
@@ -46,6 +47,21 @@ provider "aws" {
 EOF
 }
 
+remote_state {
+  backend = "s3"
+  config = {
+    encrypt        = true
+    bucket         = "terragrunt-demo-tf-state.${local.aws_region}.${local.environment}.nbcuniversaltech.com"
+    key            = "${path_relative_to_include()}/terraform.tfstate"
+    region         = local.aws_region
+    dynamodb_table = "terragrunt-demo-tf-locks-${local.aws_region}-${local.environment}"
+  }
+  generate = {
+    path      = "backend.tf"
+    if_exists = "overwrite_terragrunt"
+  }
+}
+
 # Assume this role to interact with aws
 iam_role = "arn:aws:iam::${local.aws_account_id}:role/ApplicationOwner"
 
@@ -61,6 +77,7 @@ iam_role = "arn:aws:iam::${local.aws_account_id}:role/ApplicationOwner"
 
 inputs = merge(
   local.environment_vars.locals,
-  local.environment_vars.locals,
   local.region_vars.locals,
+  local.common_vars.locals,
 )
+

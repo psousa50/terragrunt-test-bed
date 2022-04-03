@@ -9,3 +9,7 @@ variable "aws_region" {
 variable "aws_account_id" {
   type = string
 }
+
+variable "topic_name" {
+  type = string
+}
