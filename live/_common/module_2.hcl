@@ -16,4 +16,5 @@ terraform {
 
 inputs = {
   topic_name     = "module-2-${local.topic_name}-${local.aws_account_id}-${local.aws_region}-${local.environment}"
+  other_var      = "extra-name"
 }
