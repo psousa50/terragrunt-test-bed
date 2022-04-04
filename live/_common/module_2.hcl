@@ -11,10 +11,9 @@ locals {
 }
 
 terraform {
-  source = "${local.common_vars.locals.modules_folder}//module-1"
+  source = "${local.common_vars.locals.modules_folder}//module_2"
 }
 
 inputs = {
-  environment    = local.environment
-  topic_name     = "module-1-${local.topic_name}-${local.aws_account_id}-${local.aws_region}-${local.environment}"
+  topic_name     = "module-2-${local.topic_name}-${local.aws_account_id}-${local.aws_region}-${local.environment}"
 }
